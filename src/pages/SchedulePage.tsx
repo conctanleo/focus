@@ -121,7 +121,7 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-slate-900 min-h-full">
       <ViewSwitcher view={view} onChange={setView} currentDate={currentDate} onPrev={() => navigate(-1)} onNext={() => navigate(1)} />
 
       {view === 'day' && (
