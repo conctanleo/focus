@@ -1,10 +1,11 @@
 import { NavLink, useNavigate } from 'react-router-dom'
+import { Timer, CalendarDays, StickyNote, LogOut } from 'lucide-react'
 import { useAuth } from '../store/auth'
 
 const links = [
-  { to: '/pomodoro', label: 'Pomodoro', icon: '🍅' },
-  { to: '/schedule', label: 'Schedule', icon: '📅' },
-  { to: '/memo', label: 'Memo', icon: '📝' },
+  { to: '/pomodoro', label: 'Pomodoro', Icon: Timer },
+  { to: '/schedule', label: 'Schedule', Icon: CalendarDays },
+  { to: '/memo', label: 'Memo', Icon: StickyNote },
 ]
 
 export default function Sidebar() {
@@ -12,32 +13,32 @@ export default function Sidebar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="flex w-14 flex-col items-center border-r border-neutral-200 bg-white py-4">
-      <div className="mb-8 text-lg font-bold">F</div>
+    <aside className="flex w-14 flex-col items-center border-r border-white/6 bg-slate-900 py-4">
+      <div className="mb-8 text-lg font-bold text-indigo-400">F</div>
       <nav className="flex flex-1 flex-col gap-3">
-        {links.map((link) => (
+        {links.map(({ to, label, Icon }) => (
           <NavLink
-            key={link.to}
-            to={link.to}
-            title={link.label}
+            key={to}
+            to={to}
+            title={label}
             className={({ isActive }) =>
-              `flex h-9 w-9 items-center justify-center rounded-lg text-lg transition-colors ${
-                isActive ? 'bg-neutral-100' : 'hover:bg-neutral-50'
+              `flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+                isActive ? 'bg-indigo-500/15 text-indigo-400' : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
               }`
             }
           >
-            {link.icon}
+            <Icon size={18} />
           </NavLink>
         ))}
       </nav>
       <div className="flex flex-col items-center gap-2">
-        <span className="text-xs text-neutral-400">{user?.name?.[0]}</span>
+        <span className="text-xs text-slate-500">{user?.name?.[0]}</span>
         <button
           onClick={() => { logout(); navigate('/login') }}
-          className="text-xs text-neutral-300 hover:text-neutral-500"
+          className="text-slate-600 hover:text-slate-400"
           title="Sign out"
         >
-          ↵
+          <LogOut size={14} />
         </button>
       </div>
     </aside>
