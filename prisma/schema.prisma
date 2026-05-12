@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String
+  password      String
+  createdAt     DateTime       @default(now())
+  tasks         Task[]
+  memos         Memo[]
+  scheduleNotes ScheduleNote[]
+}
+
+model Task {
+  id               String    @id @default(uuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id])
+  title            String
+  description      String?
+  taskDate         String
+  scheduledStartAt DateTime?
+  scheduledEndAt   DateTime?
+  pomodoroStatus   String    @default("idle")
+  pomodoroCount    Int       @default(0)
+  notifiedAt       DateTime?
+  createdAt        DateTime  @default(now())
+}
+
+model Memo {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  content   String   @default("")
+  color     String   @default("orange")
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ScheduleNote {
+  id       String @id @default(uuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  date     String
+  noteType String @default("day")
+  content  String @default("")
+}
