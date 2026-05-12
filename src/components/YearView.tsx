@@ -39,13 +39,13 @@ function MonthCard({
 
   return (
     <div
-      className="cursor-pointer rounded-xl border border-neutral-200 bg-white p-4 transition-colors hover:border-neutral-400"
+      className="cursor-pointer rounded-xl border border-white/6 bg-white/5 p-4 transition-colors hover:border-white/15"
       onClick={() => onSelect(month.month)}
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium">{month.label}</h3>
+        <h3 className="text-sm font-medium text-slate-300">{month.label}</h3>
         {month.taskCount > 0 && (
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-900 text-xs font-medium text-white">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500 text-xs font-medium text-white">
             {month.taskCount}
           </span>
         )}
@@ -56,12 +56,12 @@ function MonthCard({
             <input
               value={draft} onChange={(e) => setDraft(e.target.value)}
               placeholder="Month note..."
-              className="w-full rounded border border-neutral-300 px-2 py-1 text-xs outline-none"
+              className="w-full rounded border border-white/8 bg-white/5 px-2 py-1 text-xs text-slate-200 outline-none placeholder:text-slate-500"
               autoFocus
             />
             <button
               onClick={() => { onSaveNote(month.month, draft); setEditing(false) }}
-              className="mt-1 rounded bg-neutral-900 px-2 py-0.5 text-[10px] text-white"
+              className="mt-1 rounded bg-indigo-500 px-2 py-0.5 text-[10px] text-white"
             >
               Save
             </button>
@@ -69,7 +69,7 @@ function MonthCard({
         ) : (
           <p
             onClick={(e) => { e.stopPropagation(); setEditing(true) }}
-            className="text-xs text-neutral-400 hover:text-neutral-600"
+            className="text-xs text-slate-500 transition-colors hover:text-slate-400"
           >
             {month.note || 'Add note...'}
           </p>

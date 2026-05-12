@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 
 interface Task {
   id: string
@@ -36,14 +37,12 @@ export default function DayView({ tasks, note, onSaveNote, onNewTask }: DayViewP
 
   return (
     <div className="flex gap-6">
-      {/* Time axis */}
       <div className="relative w-16 shrink-0">
         {HOURS.map((h) => (
-          <div key={h} className="h-10 border-t border-neutral-100 text-right pr-2 text-xs text-neutral-400">
+          <div key={h} className="h-10 border-t border-white/5 pr-2 text-right text-xs text-slate-500">
             {h.toString().padStart(2, '0')}:00
           </div>
         ))}
-        {/* Timed tasks positioned on timeline */}
         <div className="absolute inset-0">
           {timedTasks.map((task) => {
             const pos = getTaskPosition(task)
@@ -51,7 +50,7 @@ export default function DayView({ tasks, note, onSaveNote, onNewTask }: DayViewP
             return (
               <div
                 key={task.id}
-                className="absolute left-0 right-0 mx-1 rounded bg-orange-100 border border-orange-200 px-1.5 py-0.5 text-xs"
+                className="absolute left-0 right-0 mx-1 rounded bg-orange-500/15 border border-orange-500/20 px-1.5 py-0.5 text-xs text-orange-300"
                 style={{ top: `${pos.top}%`, height: `${pos.height}%`, minHeight: 24 }}
               >
                 <span className="truncate block">{task.title}</span>
@@ -61,17 +60,20 @@ export default function DayView({ tasks, note, onSaveNote, onNewTask }: DayViewP
         </div>
       </div>
 
-      {/* Task list + note */}
       <div className="flex-1 space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-neutral-700">Tasks</h3>
-          <button onClick={onNewTask} className="rounded-lg bg-neutral-900 px-3 py-1 text-xs font-medium text-white hover:bg-neutral-800">
-            + New
+          <h3 className="text-sm font-medium text-slate-300">Tasks</h3>
+          <button
+            onClick={onNewTask}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-500 px-3 py-1.5 text-xs font-medium text-white shadow-lg shadow-indigo-500/20 transition-colors hover:bg-indigo-400"
+          >
+            <Plus size={12} />
+            New
           </button>
         </div>
 
         {timedTasks.length === 0 && untimedTasks.length === 0 && (
-          <p className="text-sm text-neutral-400">No tasks for this day</p>
+          <p className="text-sm text-slate-500">No tasks for this day</p>
         )}
 
         {timedTasks.map((task) => {
@@ -81,8 +83,8 @@ export default function DayView({ tasks, note, onSaveNote, onNewTask }: DayViewP
             ? `${start.getHours().toString().padStart(2, '0')}:${start.getMinutes().toString().padStart(2, '0')}${end ? ` - ${end.getHours().toString().padStart(2, '0')}:${end.getMinutes().toString().padStart(2, '0')}` : ''}`
             : ''
           return (
-            <div key={task.id} className="flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-sm">
-              <span className="text-xs text-neutral-400">{timeLabel}</span>
+            <div key={task.id} className="flex items-center gap-2 rounded-lg border border-white/6 px-3 py-2 text-sm text-slate-300">
+              <span className="text-xs text-slate-500 tabular-nums">{timeLabel}</span>
               <span>{task.title}</span>
             </div>
           )
@@ -90,35 +92,34 @@ export default function DayView({ tasks, note, onSaveNote, onNewTask }: DayViewP
 
         {untimedTasks.length > 0 && (
           <div>
-            <p className="mb-1 text-xs text-neutral-400">Untimed</p>
+            <p className="mb-1 text-xs text-slate-500">Untimed</p>
             {untimedTasks.map((task) => (
-              <div key={task.id} className="flex items-center gap-2 rounded-lg border border-dashed border-neutral-200 px-3 py-2 text-sm text-neutral-500">
+              <div key={task.id} className="flex items-center gap-2 rounded-lg border border-dashed border-white/8 px-3 py-2 text-sm text-slate-400">
                 {task.title}
               </div>
             ))}
           </div>
         )}
 
-        {/* Day note */}
-        <div className="border-t border-neutral-200 pt-4">
+        <div className="border-t border-white/6 pt-4">
           {editingNote ? (
             <div>
               <textarea
                 value={noteDraft} onChange={(e) => setNoteDraft(e.target.value)}
                 placeholder="Notes for this day..."
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-900"
+                className="w-full rounded-lg border border-white/8 bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none placeholder:text-slate-500 focus:border-indigo-500/50"
                 rows={3}
               />
               <div className="mt-2 flex gap-2">
                 <button
                   onClick={() => { onSaveNote(noteDraft); setEditingNote(false) }}
-                  className="rounded-lg bg-neutral-900 px-3 py-1 text-xs font-medium text-white"
+                  className="rounded-lg bg-indigo-500 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-indigo-400"
                 >
                   Save
                 </button>
                 <button
                   onClick={() => { setNoteDraft(note); setEditingNote(false) }}
-                  className="rounded-lg border px-3 py-1 text-xs text-neutral-500"
+                  className="rounded-lg border border-white/8 px-3 py-1 text-xs text-slate-400 transition-colors hover:bg-white/5"
                 >
                   Cancel
                 </button>
@@ -127,7 +128,7 @@ export default function DayView({ tasks, note, onSaveNote, onNewTask }: DayViewP
           ) : (
             <div
               onClick={() => setEditingNote(true)}
-              className="cursor-text rounded-lg border border-dashed border-neutral-200 px-3 py-2 text-sm text-neutral-400 hover:border-neutral-400"
+              className="cursor-text rounded-lg border border-dashed border-white/8 px-3 py-2 text-sm text-slate-500 transition-colors hover:border-white/15"
             >
               {note || 'Add note...'}
             </div>
