@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Play, Pause, Square } from 'lucide-react'
 import { useTimer } from '../store/timer'
 
 export default function TimerRing() {
@@ -21,14 +22,19 @@ export default function TimerRing() {
   const secs = secondsLeft % 60
   const timeStr = secondsLeft > 0 ? `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}` : '00:00'
 
-  const ringColor =
-    mode === 'focus' ? '#e07020' : mode === 'shortBreak' ? '#3b82f6' : '#22c55e'
+  const colors = {
+    focus: { ring: '#F97316', text: '#F97316' },
+    shortBreak: { ring: '#6366F1', text: '#818CF8' },
+    longBreak: { ring: '#22C55E', text: '#22C55E' },
+  }
+  const ringColor = colors[mode].ring
+  const textColor = colors[mode].text
 
   return (
     <div className="flex flex-col items-center">
       <div className="relative">
         <svg width="250" height="250" className="-rotate-90">
-          <circle cx="125" cy="125" r="110" fill="none" stroke="#e5e5e5" strokeWidth="8" />
+          <circle cx="125" cy="125" r="110" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
           <circle
             cx="125" cy="125" r="110" fill="none" stroke={ringColor} strokeWidth="8"
             strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset}
@@ -36,10 +42,10 @@ export default function TimerRing() {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-5xl font-mono font-bold tracking-tight" style={{ color: ringColor }}>
+          <span className="font-mono text-5xl font-bold tracking-tight tabular-nums" style={{ color: textColor }}>
             {timeStr}
           </span>
-          <span className="mt-1 text-xs text-neutral-400">
+          <span className="mt-1 text-xs text-slate-400">
             {mode === 'focus' ? 'Focus' : mode === 'shortBreak' ? 'Break' : 'Long break'}
           </span>
         </div>
@@ -47,33 +53,43 @@ export default function TimerRing() {
 
       <div className="mt-4 flex items-center gap-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <span key={i} className="text-lg">
-            {i < (completedPomodoros % 4) ? '🍅' : i < (completedPomodoros % 4) + (isRunning && mode === 'focus' ? 1 : 0) ? '🍅' : '⭕'}
-          </span>
+          <span
+            key={i}
+            className={`inline-block h-3 w-3 rounded-full ${
+              i < (completedPomodoros % 4)
+                ? 'bg-orange-500'
+                : i < (completedPomodoros % 4) + (isRunning && mode === 'focus' ? 1 : 0)
+                  ? 'bg-orange-500'
+                  : 'border border-white/10 bg-transparent'
+            }`}
+          />
         ))}
       </div>
 
-      <div className="mt-4 flex gap-3">
+      <div className="mt-6 flex gap-3">
         {!isRunning ? (
           <button
             onClick={resume}
-            className="rounded-lg bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+            className="inline-flex items-center gap-2 rounded-lg bg-indigo-500 px-5 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition-colors hover:bg-indigo-400"
           >
-            {secondsLeft === totalSeconds ? '▶ Start' : '▶ Resume'}
+            <Play size={14} />
+            {secondsLeft === totalSeconds ? 'Start' : 'Resume'}
           </button>
         ) : (
           <button
             onClick={pause}
-            className="rounded-lg bg-neutral-200 px-5 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-300"
+            className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-5 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/15"
           >
-            ⏸ Pause
+            <Pause size={14} />
+            Pause
           </button>
         )}
         <button
           onClick={reset}
-          className="rounded-lg border border-neutral-300 px-5 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100"
+          className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-5 py-2 text-sm font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-slate-300"
         >
-          ⏹ Stop
+          <Square size={14} />
+          Stop
         </button>
       </div>
     </div>

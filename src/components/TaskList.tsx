@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 
 interface Task {
   id: string
@@ -27,10 +28,10 @@ export default function TaskList({ tasks, activeTaskId, onStart, onCreate }: Tas
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'running': return { text: '●', color: 'text-orange-500' }
-      case 'paused': return { text: '⏸', color: 'text-yellow-500' }
-      case 'done': return { text: '✓', color: 'text-green-500' }
-      default: return { text: '○', color: 'text-neutral-300' }
+      case 'running': return { color: 'text-orange-400' }
+      case 'paused': return { color: 'text-amber-400' }
+      case 'done': return { color: 'text-green-400' }
+      default: return { color: 'text-slate-600' }
     }
   }
 
@@ -44,10 +45,13 @@ export default function TaskList({ tasks, activeTaskId, onStart, onCreate }: Tas
           type="text" value={newTitle} placeholder="Add task..."
           onChange={(e) => setNewTitle(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-          className="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-900"
+          className="flex-1 rounded-lg border border-white/8 bg-white/5 px-3 py-2 text-sm text-slate-50 outline-none placeholder:text-slate-500 focus:border-indigo-500/50"
         />
-        <button onClick={handleCreate} className="rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800">
-          +
+        <button
+          onClick={handleCreate}
+          className="inline-flex items-center justify-center rounded-lg bg-indigo-500 px-3 py-2 text-white shadow-lg shadow-indigo-500/20 transition-colors hover:bg-indigo-400"
+        >
+          <Plus size={16} />
         </button>
       </div>
 
@@ -55,7 +59,9 @@ export default function TaskList({ tasks, activeTaskId, onStart, onCreate }: Tas
         {timedTasks.map((task) => {
           const start = task.scheduledStartAt ? new Date(task.scheduledStartAt) : null
           const end = task.scheduledEndAt ? new Date(task.scheduledEndAt) : null
-          const timeLabel = start ? `${start.getHours().toString().padStart(2, '0')}:${start.getMinutes().toString().padStart(2, '0')}${end ? ` - ${end.getHours().toString().padStart(2, '0')}:${end.getMinutes().toString().padStart(2, '0')}` : ''}` : ''
+          const timeLabel = start
+            ? `${start.getHours().toString().padStart(2, '0')}:${start.getMinutes().toString().padStart(2, '0')}${end ? ` - ${end.getHours().toString().padStart(2, '0')}:${end.getMinutes().toString().padStart(2, '0')}` : ''}`
+            : ''
           return (
             <TaskItem
               key={task.id} task={task} activeTaskId={activeTaskId}
@@ -70,7 +76,7 @@ export default function TaskList({ tasks, activeTaskId, onStart, onCreate }: Tas
           />
         ))}
         {tasks.length === 0 && (
-          <p className="py-8 text-center text-sm text-neutral-400">No tasks today</p>
+          <p className="py-8 text-center text-sm text-slate-500">No tasks today</p>
         )}
       </div>
     </div>
@@ -82,26 +88,38 @@ function TaskItem({ task, activeTaskId, timeLabel, onStart, badge }: {
   activeTaskId: string | null
   timeLabel?: string
   onStart: (id: string) => void
-  badge: { text: string; color: string }
+  badge: { color: string }
 }) {
   const isActive = task.id === activeTaskId
+  const statusDots: Record<string, string> = {
+    running: '●',
+    paused: '⏸',
+    done: '✓',
+    idle: '○',
+  }
   return (
     <div
-      className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm ${
-        isActive ? 'border-orange-300 bg-orange-50' : 'border-neutral-200'
+      className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm transition-colors ${
+        isActive
+          ? 'border-indigo-500/30 bg-indigo-500/8'
+          : 'border-white/6 hover:border-white/10'
       }`}
     >
       <div className="flex items-center gap-2 min-w-0">
-        <span className={badge.color}>{badge.text}</span>
-        <span className="truncate">{task.title}</span>
-        {timeLabel && <span className="text-xs text-neutral-400 shrink-0">{timeLabel}</span>}
+        <span className={`text-xs ${badge.color}`}>
+          {statusDots[task.pomodoroStatus] || statusDots.idle}
+        </span>
+        <span className="truncate text-slate-300">{task.title}</span>
+        {timeLabel && <span className="text-xs text-slate-500 shrink-0 tabular-nums">{timeLabel}</span>}
       </div>
       <div className="flex items-center gap-2 shrink-0">
-        {task.pomodoroCount > 0 && <span className="text-xs text-neutral-400">🍅×{task.pomodoroCount}</span>}
+        {task.pomodoroCount > 0 && (
+          <span className="text-xs text-slate-500">{task.pomodoroCount}×</span>
+        )}
         {task.pomodoroStatus === 'idle' && (
           <button
             onClick={() => onStart(task.id)}
-            className="rounded px-2 py-0.5 text-xs font-medium text-neutral-600 hover:bg-neutral-100"
+            className="rounded px-2 py-0.5 text-xs font-medium text-indigo-400 transition-colors hover:bg-indigo-500/10"
           >
             Start
           </button>
