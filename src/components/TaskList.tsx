@@ -91,12 +91,6 @@ function TaskItem({ task, activeTaskId, timeLabel, onStart, badge }: {
   badge: { color: string }
 }) {
   const isActive = task.id === activeTaskId
-  const statusDots: Record<string, string> = {
-    running: '●',
-    paused: '⏸',
-    done: '✓',
-    idle: '○',
-  }
   return (
     <div
       className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm transition-colors ${
@@ -106,9 +100,7 @@ function TaskItem({ task, activeTaskId, timeLabel, onStart, badge }: {
       }`}
     >
       <div className="flex items-center gap-2 min-w-0">
-        <span className={`text-xs ${badge.color}`}>
-          {statusDots[task.pomodoroStatus] || statusDots.idle}
-        </span>
+        <span className={`inline-block h-2 w-2 rounded-full shrink-0 ${badge.color.replace('text-', 'bg-')}`} />
         <span className="truncate text-slate-300">{task.title}</span>
         {timeLabel && <span className="text-xs text-slate-500 shrink-0 tabular-nums">{timeLabel}</span>}
       </div>
