@@ -12,7 +12,7 @@ export default function AppLayout() {
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <main className="flex-1 overflow-auto bg-neutral-50">
+      <main className="flex-1 overflow-auto bg-slate-900">
         <Routes>
           <Route path="/" element={<Navigate to="/pomodoro" replace />} />
           <Route path="/pomodoro" element={<PomodoroPage />} />
