@@ -17,7 +17,7 @@ export default function YearView({
   onSaveMonthNote: (month: number, content: string) => void
 }) {
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3" style={{ gap: 'var(--section-gap)' }}>
       {months.map((m) => (
         <MonthCard key={m.month} month={m} onSelect={onSelectMonth} onSaveNote={onSaveMonthNote} />
       ))}
@@ -39,40 +39,41 @@ function MonthCard({
 
   return (
     <div
-      className="cursor-pointer rounded-xl border border-white/6 bg-white/5 p-4 transition-colors hover:border-white/15"
+      className="cursor-pointer border border-white/6 bg-white/5 transition-colors hover:border-white/15"
+      style={{ borderRadius: 'var(--radius)', padding: 'var(--item-pad-y) var(--item-pad-x)' }}
       onClick={() => onSelect(month.month)}
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-slate-300">{month.label}</h3>
+        <h3 className="font-medium text-slate-300" style={{ fontSize: 'var(--body-font)' }}>{month.label}</h3>
         {month.taskCount > 0 && (
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500 text-xs font-medium text-white">
+          <span className="flex items-center justify-center rounded-full bg-indigo-500 font-medium text-white"
+            style={{ width: 'clamp(20px, 1.8vw, 28px)', height: 'clamp(20px, 1.8vw, 28px)', fontSize: 'var(--small-font)' }}>
             {month.taskCount}
           </span>
         )}
       </div>
-      <div className="mt-2">
+      <div style={{ marginTop: 'var(--item-gap)' }}>
         {editing ? (
           <div onClick={(e) => e.stopPropagation()}>
             <input
               value={draft} onChange={(e) => setDraft(e.target.value)}
               placeholder="Month note..."
-              className="w-full rounded border border-white/8 bg-white/5 px-2 py-1 text-xs text-slate-200 outline-none placeholder:text-slate-500"
+              className="w-full border border-white/8 bg-white/5 text-slate-200 outline-none placeholder:text-slate-500"
+              style={{ borderRadius: 'var(--radius-sm)', padding: 'clamp(4px, 0.3vw, 6px) clamp(6px, 0.5vw, 10px)', fontSize: 'var(--small-font)' }}
               autoFocus
             />
             <button
               onClick={() => { onSaveNote(month.month, draft); setEditing(false) }}
-              className="mt-1 rounded bg-indigo-500 px-2 py-0.5 text-[10px] text-white"
-            >
-              Save
-            </button>
+              className="mt-1 bg-indigo-500 text-white"
+              style={{ borderRadius: 'var(--radius-sm)', padding: 'clamp(2px, 0.2vw, 4px) clamp(6px, 0.5vw, 10px)', fontSize: 'clamp(8px, 0.6vw, 10px)' }}
+            >Save</button>
           </div>
         ) : (
           <p
             onClick={(e) => { e.stopPropagation(); setEditing(true) }}
-            className="text-xs text-slate-500 transition-colors hover:text-slate-400"
-          >
-            {month.note || 'Add note...'}
-          </p>
+            className="text-slate-500 transition-colors hover:text-slate-400"
+            style={{ fontSize: 'var(--small-font)' }}
+          >{month.note || 'Add note...'}</p>
         )}
       </div>
     </div>
