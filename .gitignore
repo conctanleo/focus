@@ -1,9 +1,13 @@
 node_modules/
 dist/
+dev.db
+dev.db-journal
 prisma/dev.db
 prisma/dev.db-journal
 .env
 .superpowers/
 .claude/
 src/generated/
+logs/
+data/
 *.local

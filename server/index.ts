@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import http from 'http'
 import { Server } from 'socket.io'
+import path from 'path'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import authRoutes from './routes/auth'
@@ -14,11 +15,18 @@ dotenv.config()
 
 const app = express()
 const server = http.createServer(app)
+
+const isProduction = process.env.NODE_ENV === 'production'
+
 const io = new Server(server, {
-  cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] },
+  cors: isProduction
+    ? false
+    : { origin: 'http://localhost:5173', methods: ['GET', 'POST'] },
 })
 
-app.use(cors({ origin: 'http://localhost:5173' }))
+if (!isProduction) {
+  app.use(cors({ origin: 'http://localhost:5173' }))
+}
 app.use(express.json())
 
 app.set('io', io)
@@ -52,6 +60,14 @@ io.on('connection', (socket) => {
 
 setIO(io)
 startCron()
+
+if (isProduction) {
+  const distPath = path.join(import.meta.dirname, '..', 'dist')
+  app.use(express.static(distPath))
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'))
+  })
+}
 
 const PORT = process.env.PORT || 3001
 server.listen(PORT, () => {
