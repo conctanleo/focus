@@ -7,7 +7,6 @@ module.exports = {
       interpreter_args: 'tsx',
       env: {
         NODE_ENV: 'production',
-        PORT: 3001,
       },
       // Restart if memory exceeds 200MB
       max_memory_restart: '200M',
