@@ -33,26 +33,25 @@ export default function PomodoroConfirmDialog({ taskId, title, scheduledStartAt,
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm rounded-xl border border-white/8 bg-slate-800 p-6 shadow-2xl">
-        <div className="mb-4 text-center">
-          <Bell size={36} className="mx-auto text-indigo-400" />
-          <h3 className="mt-2 text-lg font-semibold text-slate-100">Scheduled Time</h3>
-        </div>
-        <p className="mb-1 text-center text-sm font-medium text-slate-200">{title}</p>
-        <p className="mb-6 text-center text-xs text-slate-400">Scheduled: {timeLabel}</p>
-        <div className="flex gap-3">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm border border-white/8 bg-slate-800 shadow-2xl text-center"
+        style={{ borderRadius: 'var(--radius)', padding: 'var(--section-gap)' }}>
+        <Bell style={{ width: 'clamp(28px, 2.5vw, 40px)', height: 'clamp(28px, 2.5vw, 40px)' }} className="mx-auto text-indigo-400" />
+        <h3 className="font-semibold text-slate-100" style={{ fontSize: 'var(--heading-font)', marginTop: 'var(--item-gap)' }}>Scheduled Time</h3>
+        <p className="font-medium text-slate-200" style={{ fontSize: 'var(--body-font)', marginTop: 'clamp(4px, 0.3vw, 8px)' }}>{title}</p>
+        <p className="text-slate-400" style={{ fontSize: 'var(--small-font)', marginBottom: 'var(--section-gap)' }}>Scheduled: {timeLabel}</p>
+        <div className="flex" style={{ gap: 'var(--item-gap)' }}>
           <button
             onClick={() => startMutation.mutate()}
             disabled={startMutation.isPending}
-            className="flex-1 rounded-lg bg-orange-500 py-2.5 text-sm font-medium text-white shadow-lg shadow-orange-500/20 transition-colors hover:bg-orange-400 disabled:opacity-50"
-          >
+            className="flex-1 bg-orange-500 font-medium text-white shadow-lg shadow-orange-500/20 transition-colors hover:bg-orange-400 disabled:opacity-50"
+            style={{ padding: 'var(--btn-pad-y) var(--btn-pad-x)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--body-font)' }}>
             Start Pomodoro
           </button>
           <button
             onClick={() => skipMutation.mutate()}
             disabled={skipMutation.isPending}
-            className="flex-1 rounded-lg border border-white/8 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-white/5"
-          >
+            className="flex-1 border border-white/8 font-medium text-slate-400 transition-colors hover:bg-white/5"
+            style={{ padding: 'var(--btn-pad-y) var(--btn-pad-x)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--body-font)' }}>
             Skip
           </button>
         </div>

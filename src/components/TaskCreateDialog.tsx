@@ -29,48 +29,55 @@ export default function TaskCreateDialog({ defaultDate, onSave, onClose }: Props
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-xl border border-white/8 bg-slate-800 p-6 shadow-2xl"
+        className="w-full max-w-sm border border-white/8 bg-slate-800 shadow-2xl"
+        style={{ borderRadius: 'var(--radius)', padding: 'var(--section-gap)' }}
       >
-        <h3 className="mb-4 text-lg font-semibold text-slate-100">New Schedule Task</h3>
+        <h3 className="font-semibold text-slate-100" style={{ fontSize: 'var(--heading-font)', marginBottom: 'var(--section-gap)' }}>New Schedule Task</h3>
         <input
           type="text" value={title} placeholder="Task title"
           onChange={(e) => setTitle(e.target.value)}
-          className="mb-3 w-full rounded-lg border border-white/8 bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none placeholder:text-slate-500 focus:border-indigo-500/50"
+          className="w-full border border-white/8 bg-white/5 text-slate-200 outline-none placeholder:text-slate-500 focus:border-indigo-500/50"
+          style={{ borderRadius: 'var(--radius-sm)', padding: 'var(--item-pad-y) var(--item-pad-x)', fontSize: 'var(--body-font)', marginBottom: 'var(--item-gap)' }}
           autoFocus
         />
-        <div className="mb-3 flex gap-3">
+        <div className="flex" style={{ gap: 'var(--item-gap)', marginBottom: 'var(--item-gap)' }}>
           <div className="flex-1">
-            <label className="mb-1 block text-xs text-slate-400">Date</label>
+            <label className="mb-1 block text-slate-400" style={{ fontSize: 'var(--small-font)' }}>Date</label>
             <input
               type="date" value={taskDate}
               onChange={(e) => setTaskDate(e.target.value)}
-              className="w-full rounded-lg border border-white/8 bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none [color-scheme:dark]"
+              className="w-full border border-white/8 bg-white/5 text-slate-200 outline-none [color-scheme:dark]"
+              style={{ borderRadius: 'var(--radius-sm)', padding: 'var(--item-pad-y) var(--item-pad-x)', fontSize: 'var(--body-font)' }}
             />
           </div>
         </div>
-        <div className="mb-4 flex gap-3">
+        <div className="flex" style={{ gap: 'var(--item-gap)', marginBottom: 'var(--section-gap)' }}>
           <div className="flex-1">
-            <label className="mb-1 block text-xs text-slate-400">Start</label>
+            <label className="mb-1 block text-slate-400" style={{ fontSize: 'var(--small-font)' }}>Start</label>
             <input
               type="time" value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="w-full rounded-lg border border-white/8 bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none [color-scheme:dark]"
+              className="w-full border border-white/8 bg-white/5 text-slate-200 outline-none [color-scheme:dark]"
+              style={{ borderRadius: 'var(--radius-sm)', padding: 'var(--item-pad-y) var(--item-pad-x)', fontSize: 'var(--body-font)' }}
             />
           </div>
           <div className="flex-1">
-            <label className="mb-1 block text-xs text-slate-400">End</label>
+            <label className="mb-1 block text-slate-400" style={{ fontSize: 'var(--small-font)' }}>End</label>
             <input
               type="time" value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full rounded-lg border border-white/8 bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none [color-scheme:dark]"
+              className="w-full border border-white/8 bg-white/5 text-slate-200 outline-none [color-scheme:dark]"
+              style={{ borderRadius: 'var(--radius-sm)', padding: 'var(--item-pad-y) var(--item-pad-x)', fontSize: 'var(--body-font)' }}
             />
           </div>
         </div>
-        <div className="flex gap-2">
-          <button type="submit" className="flex-1 rounded-lg bg-indigo-500 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition-colors hover:bg-indigo-400">
+        <div className="flex" style={{ gap: 'var(--item-gap)' }}>
+          <button type="submit" className="flex-1 bg-indigo-500 font-medium text-white shadow-lg shadow-indigo-500/20 transition-colors hover:bg-indigo-400"
+            style={{ padding: 'var(--btn-pad-y) var(--btn-pad-x)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--body-font)' }}>
             Create
           </button>
-          <button type="button" onClick={onClose} className="rounded-lg border border-white/8 px-4 py-2 text-sm text-slate-400 transition-colors hover:bg-white/5">
+          <button type="button" onClick={onClose} className="border border-white/8 text-slate-400 transition-colors hover:bg-white/5"
+            style={{ padding: 'var(--btn-pad-y) var(--btn-pad-x)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--body-font)' }}>
             Cancel
           </button>
         </div>
