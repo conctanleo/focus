@@ -8,11 +8,12 @@ interface TimerState {
   isRunning: boolean
   activeTaskId: string | null
   completedPomodoros: number
+  startedAt: number | null
 
   start: (taskId: string) => void
   pause: () => void
   resume: () => void
-  tick: () => void
+  sync: () => void
   complete: () => void
   reset: () => void
 }
@@ -27,6 +28,7 @@ export const useTimer = create<TimerState>((set, get) => ({
   isRunning: false,
   activeTaskId: null,
   completedPomodoros: 0,
+  startedAt: null,
 
   start: (taskId) =>
     set({
@@ -34,20 +36,30 @@ export const useTimer = create<TimerState>((set, get) => ({
       secondsLeft: FOCUS_SECONDS,
       isRunning: true,
       mode: 'focus',
+      startedAt: Date.now(),
     }),
 
-  pause: () => set({ isRunning: false }),
+  pause: () => set({ isRunning: false, startedAt: null }),
 
-  resume: () => set({ isRunning: true }),
-
-  tick: () => {
+  resume: () => {
     const state = get()
-    if (!state.isRunning) return
-    if (state.secondsLeft <= 1) {
+    set({
+      isRunning: true,
+      startedAt: Date.now() - (getTotal(state.mode) - state.secondsLeft) * 1000,
+    })
+  },
+
+  sync: () => {
+    const state = get()
+    if (!state.isRunning || state.startedAt == null) return
+    const elapsed = Math.floor((Date.now() - state.startedAt) / 1000)
+    const total = getTotal(state.mode)
+    const remaining = Math.max(total - elapsed, 0)
+    if (remaining <= 0) {
       get().complete()
-      return
+    } else {
+      set({ secondsLeft: remaining })
     }
-    set({ secondsLeft: state.secondsLeft - 1 })
   },
 
   complete: () => {
@@ -60,13 +72,14 @@ export const useTimer = create<TimerState>((set, get) => ({
         secondsLeft: isLongBreak ? LONG_BREAK_SECONDS : SHORT_BREAK_SECONDS,
         isRunning: true,
         completedPomodoros: newCount,
+        startedAt: Date.now(),
       })
     } else {
-      // Break completed, reset to focus
       set({
         mode: 'focus',
         secondsLeft: FOCUS_SECONDS,
         isRunning: false,
+        startedAt: null,
       })
     }
   },
@@ -77,5 +90,12 @@ export const useTimer = create<TimerState>((set, get) => ({
       secondsLeft: FOCUS_SECONDS,
       isRunning: false,
       activeTaskId: null,
+      startedAt: null,
     }),
 }))
+
+function getTotal(mode: TimerMode) {
+  if (mode === 'focus') return FOCUS_SECONDS
+  if (mode === 'shortBreak') return SHORT_BREAK_SECONDS
+  return LONG_BREAK_SECONDS
+}

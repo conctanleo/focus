@@ -3,15 +3,24 @@ import { Play, Pause, Square } from 'lucide-react'
 import { useTimer } from '../store/timer'
 
 export default function TimerRing() {
-  const { mode, secondsLeft, isRunning, completedPomodoros, tick, pause, resume, reset } = useTimer()
+  const { mode, secondsLeft, isRunning, completedPomodoros, sync, pause, resume, reset } = useTimer()
   const intervalRef = useRef<ReturnType<typeof setInterval>>()
 
   useEffect(() => {
     if (isRunning) {
-      intervalRef.current = setInterval(tick, 1000)
+      intervalRef.current = setInterval(sync, 1000)
     }
     return () => clearInterval(intervalRef.current)
-  }, [isRunning])
+  }, [isRunning, sync])
+
+  // Catch up when user switches back to this tab
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') sync()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [sync])
 
   const totalSeconds = mode === 'focus' ? 25 * 60 : mode === 'shortBreak' ? 5 * 60 : 15 * 60
   const progress = 1 - secondsLeft / totalSeconds
