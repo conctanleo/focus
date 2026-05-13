@@ -2,17 +2,38 @@
 @import "tailwindcss";
 
 :root {
+  --body-font: clamp(12px, 0.9vw, 15px);
+  --small-font: clamp(9px, 0.65vw, 11px);
+  --heading-font: clamp(14px, 1vw, 18px);
+  --content-pad: clamp(16px, 2vw, 40px);
+  --section-gap: clamp(12px, 1.2vw, 24px);
+  --item-gap: clamp(4px, 0.3vw, 8px);
+  --sidebar-w: clamp(44px, 3.5vw, 64px);
+  --task-panel-w: clamp(180px, 16vw, 300px);
+  --auth-card-w: clamp(300px, 28vw, 420px);
+  --memo-card-min: clamp(160px, 14vw, 260px);
+  --timer-size: clamp(120px, 12vw, 220px);
+  --timer-font: clamp(24px, 2.5vw, 44px);
+  --timer-stroke: clamp(2px, 0.15vw, 4px);
+  --btn-pad-y: clamp(6px, 0.6vw, 11px);
+  --btn-pad-x: clamp(14px, 1.5vw, 24px);
+  --item-pad-y: clamp(8px, 0.7vw, 13px);
+  --item-pad-x: clamp(10px, 0.8vw, 16px);
+  --radius: clamp(6px, 0.6vw, 12px);
+  --radius-sm: clamp(4px, 0.4vw, 8px);
+  --bg-deep: #0F172A;
+  --bg-card: #1B2336;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --text-primary: #F8FAFC;
+  --text-secondary: #E2E8F0;
+  --text-muted: #94A3B8;
+  --accent: #6366F1;
+
   font-family: 'Work Sans', system-ui, sans-serif;
-  color: #F8FAFC;
-  background: #0F172A;
+  font-size: var(--body-font);
+  color: var(--text-primary);
+  background: var(--bg-deep);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  min-height: 100vh;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { min-height: 100vh; }
