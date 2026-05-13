@@ -43,13 +43,13 @@ export default function PomodoroPage() {
   }
 
   return (
-    <div className="flex h-full gap-8 p-8 bg-slate-900">
+    <div className="flex h-full bg-slate-900" style={{ padding: 'var(--content-pad)', gap: 'var(--section-gap)' }}>
       <div className="flex flex-1 items-center justify-center">
         <TimerRing />
       </div>
-      <div className="border-l border-white/6 pl-8">
+      <div className="border-l border-white/6" style={{ paddingLeft: 'var(--section-gap)' }}>
         {isLoading ? (
-          <p className="text-sm text-slate-400">Loading tasks...</p>
+          <p className="text-slate-400" style={{ fontSize: 'var(--body-font)' }}>Loading tasks...</p>
         ) : (
           <TaskList
             tasks={data || []}
